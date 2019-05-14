@@ -5,8 +5,6 @@ export const GlobalStyles = createGlobalStyle`
 
   * {
     box-sizing: border-box;
-    outline: none;
-    touch-action: pan-x pan-y;
   }
 
   body {

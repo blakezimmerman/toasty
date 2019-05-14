@@ -2,6 +2,7 @@ import { ErrorBoundary } from "components/ErrorBoundary";
 import { GlobalStyles } from "GlobalStyles";
 import React from "react";
 import { render } from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { ThemeProvider } from "styled-components";
@@ -19,7 +20,9 @@ const renderRoot = (Component: React.ComponentType<{}>) => {
           autoClose={4000}
         />
         <ErrorBoundary>
-          <Component />
+          <BrowserRouter>
+            <Component />
+          </BrowserRouter>
         </ErrorBoundary>
       </>
     </ThemeProvider>,
