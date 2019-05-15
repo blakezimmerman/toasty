@@ -58,7 +58,33 @@ const generatePost = async (
   };
 };
 
-router.post("/post", async (req: IUserRequest, res: Response) => {
+router.get("/", async (req, res) => {
+  let posts;
+
+  try {
+    posts = await getPosts();
+  } catch (error) {
+    res.status(500).json("Unable to get posts.");
+    return;
+  }
+
+  res.json(posts);
+});
+
+router.get("/:id", async (req, res) => {
+  let post;
+
+  try {
+    post = await getPost(req.params.id);
+  } catch (error) {
+    res.status(500).json(`Unable to to get post with _id of '${ req.params.id }'`);
+    return;
+  }
+
+  res.json(post);
+});
+
+router.post("/", async (req: IUserRequest, res: Response) => {
   if (req.user) {
     let post;
 
@@ -82,32 +108,6 @@ router.post("/post", async (req: IUserRequest, res: Response) => {
   } else {
     res.status(401).json("User has not been logged in.");
   }
-});
-
-router.get("/post/:id", async (req, res) => {
-  let post;
-
-  try {
-    post = await getPost(req.params.id);
-  } catch (error) {
-    res.status(500).json(`Unable to to get post with _id of '${ req.params.id }'`);
-    return;
-  }
-
-  res.json(post);
-});
-
-router.get("/posts", async (req, res) => {
-  let posts;
-
-  try {
-    posts = await getPosts();
-  } catch (error) {
-    res.status(500).json("Unable to get posts.");
-    return;
-  }
-
-  res.json(posts);
 });
 
 export { router as postsRouter };
