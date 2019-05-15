@@ -1,10 +1,10 @@
 import config from "config";
 import express from "express";
-import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
-import { SECRET } from "..";
 import { createPost } from "./data";
 import { IPost } from "./models";
+import { Response } from "express";
+import { IUserRequest } from "../users/models";
 
 const clarifaiKey = config.get<string>("clarifaiKey");
 
@@ -42,8 +42,6 @@ async function conceptProb(imageURL: string, conceptName: string) {
 
 const router = express.Router();
 
-const checkToken = (token: string) => jwt.verify(token, SECRET);
-
 const generatePost = async (
   user: string,
   content: string,
@@ -51,38 +49,47 @@ const generatePost = async (
 ): Promise<IPost> => {
   return {
     _id: new ObjectId().toHexString(),
-    user,
-    content,
+    user: user,
+    content: content,
     imageUrl: imageURL,
     toastConfidence: await conceptProb(imageURL, "toast"),
     comments: [],
+    timestamp: new Date().toISOString(),
   };
 };
 
-router.post("/post", async (req, res) => {
-  if (!(req.body.token && checkToken(req.body.token))) {
-    res.status(500).json("User has not been authenticated.");
-  }
+router.post("/post", async (req: IUserRequest, res: Response) => {
+  if (req.user) {
+    let post;
 
-  let post;
+    try {
+      post = await generatePost(req.user.name, req.body.content, req.body.imageURL);
+    } catch (error) {
+      res.status(500).json(error.message);
+      return;
+    }
 
-  try {
-    post = await generatePost(req.body.user, req.body.content, req.body.imageURL);
-  } catch (error) {
-    res.status(500).json(error.message);
-    return;
-  }
-
-  try {
-    const writeOp = await createPost(post);
-    if (writeOp.insertedCount > 0) {
-      res.json(`Post created successfully`);
-    } else {
+    try {
+      const writeOp = await createPost(post);
+      if (writeOp.insertedCount > 0) {
+        res.json(`Post created successfully`);
+      } else {
+        res.status(500).json("Unable to create post, please try again later");
+      }
+    } catch (error) {
       res.status(500).json("Unable to create post, please try again later");
     }
-  } catch (error) {
-    res.status(500).json("Unable to create post, please try again later");
+  } else {
+    res.status(401).json("User has not been logged in.");
   }
+});
+
+router.get("/post/:id", async (req, res) => {
+
+});
+
+router.get("/posts", async (req, res) => {
+
 });
 
 export { router as postsRouter };

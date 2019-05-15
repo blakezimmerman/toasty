@@ -5,4 +5,5 @@ export interface IPost {
   imageUrl: string;
   toastConfidence: number;
   comments: string[];
+  timestamp: string;
 }
