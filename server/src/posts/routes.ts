@@ -1,7 +1,7 @@
 import config from "config";
 import express from "express";
 import { ObjectId } from "mongodb";
-import { createPost } from "./data";
+import { createPost, getPost, getPosts } from "./data";
 import { IPost } from "./models";
 import { Response } from "express";
 import { IUserRequest } from "../users/models";
@@ -85,11 +85,29 @@ router.post("/post", async (req: IUserRequest, res: Response) => {
 });
 
 router.get("/post/:id", async (req, res) => {
+  let post;
 
+  try {
+    post = await getPost(req.params.id);
+  } catch (error) {
+    res.status(500).json(`Unable to to get post with _id of '${ req.params.id }'`);
+    return;
+  }
+
+  res.json(post);
 });
 
 router.get("/posts", async (req, res) => {
+  let posts;
 
+  try {
+    posts = await getPosts();
+  } catch (error) {
+    res.status(500).json("Unable to get posts.");
+    return;
+  }
+
+  res.json(posts);
 });
 
 export { router as postsRouter };
