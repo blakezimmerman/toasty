@@ -8,6 +8,7 @@ services:
       - "5000:3000"
     links:
       - mongo
+      - redis
   mongo:
     container_name: toasty-mongo
     image: mongo:4.0.6-xenial
@@ -15,3 +16,8 @@ services:
       - ./data:/data/db
     ports:
       - "27017:27017"
+  redis:
+    container_name: toasty-redis
+    image: redis:5.0.4-alpine
+    ports:
+      - "6379:6379"

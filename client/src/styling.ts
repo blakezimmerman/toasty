@@ -5,6 +5,7 @@ type Color =
   | "primaryText"
   | "text"
   | "background"
+  | "secondaryBackground"
   | "success"
   | "failure"
   | "disabled";
@@ -22,9 +23,10 @@ const theme: ITheme = {
     primaryText: "#FFFFFF",
     text: "#4A4A4A",
     background: "#FFFFFF",
+    secondaryBackground: "#EEEEEE",
     success: "#09AC47",
     failure: "#AC1909",
-    disabled: "#E6E6E6",
+    disabled: "#BDBDBD",
   },
   fonts: {
     primary: "'Lato', sans-serif",
