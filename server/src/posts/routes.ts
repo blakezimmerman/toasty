@@ -1,3 +1,4 @@
+import config from "config";
 import express from "express";
 import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
@@ -5,10 +6,12 @@ import { SECRET } from "..";
 import { createPost } from "./data";
 import { IPost } from "./models";
 
+const clarifaiKey = config.get<string>("clarifaiKey");
+
 const Clarifai = require("clarifai");
 
 const app = new Clarifai.App({
-  apiKey: process.env.CLARIFAI,
+  apiKey: clarifaiKey,
 });
 
 async function conceptProb(imageURL: string, conceptName: string) {
