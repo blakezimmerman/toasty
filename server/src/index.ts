@@ -7,6 +7,8 @@ import path from "path";
 import socketIO from "socket.io";
 import { registerRoutes } from "./routes";
 
+import { pubSub, sendMessage } from "./redis";
+
 const app = express();
 const server = createServer(app);
 const ws = socketIO.listen(server);

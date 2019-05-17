@@ -1,4 +1,5 @@
-import { commentCollection } from "../mongo/collections";
+import { commentCollection, postCollection } from "../mongo/collections";
+import { getPost } from "../posts/data";
 import { IComment } from "./models";
 
 export const createComment = async (comment: IComment) => {
@@ -7,6 +8,15 @@ export const createComment = async (comment: IComment) => {
     const newComment: IComment = {
       ...comment,
     };
+
+    const pCollection = await postCollection();
+    var post = await getPost(newComment.post)
+
+    if (post) {
+      post.comments.push(newComment._id);
+      pCollection.save(post)
+    }
+
     return collection.insertOne(newComment);
   } catch (error) {
     throw new Error(error);

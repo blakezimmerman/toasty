@@ -5,11 +5,11 @@ import { createPost, getPost, getPosts } from "./data";
 import { IPost } from "./models";
 import { Response } from "express";
 import { IUserRequest } from "../users/models";
+import { pubSub } from "../redis";
 
-const clarifaiKey = config.get<string>("clarifaiKey");
 
 const Clarifai = require("clarifai");
-
+const clarifaiKey = config.get<string>("clarifaiKey");
 const app = new Clarifai.App({
   apiKey: clarifaiKey,
 });
@@ -58,17 +58,45 @@ const generatePost = async (
   };
 };
 
-router.get("/", async (req, res) => {
-  let posts;
+router.post("/", async (req: IUserRequest, res: Response) => {
+  if (req.user) {
+    let post;
 
-  try {
-    posts = await getPosts();
-  } catch (error) {
-    res.status(500).json("Unable to get posts.");
-    return;
+    try {
+      post = await generatePost(req.user.name, req.body.content, req.body.imageURL);
+    } catch (error) {
+      res.status(500).json(error.message);
+      return;
+    }
+
+    try {
+      const writeOp = await createPost(post);
+      if (writeOp.insertedCount > 0) {
+
+        pubSub.emit(`post:success:${post._id}`, {
+          requestId: post._id,
+          data: {
+                  _id: post._id,
+                  user: post.user,
+                  content: post.content,
+                  imageUrl: post.imageUrl,
+                  toastConfidence: post.toastConfidence,
+                  comments: post.comments,
+                  timestamp: post.timestamp,
+                },
+          eventName: "post"
+        });
+
+        res.json(post);
+      } else {
+        res.status(500).json("Unable to create post, please try again later");
+      }
+    } catch (error) {
+      res.status(500).json("Unable to create post, please try again later");
+    }
+  } else {
+    res.status(401).json("User has not been logged in.");
   }
-
-  res.json(posts);
 });
 
 router.get("/:id", async (req, res) => {
@@ -84,30 +112,17 @@ router.get("/:id", async (req, res) => {
   res.json(post);
 });
 
-router.post("/", async (req: IUserRequest, res: Response) => {
-  if (req.user) {
-    let post;
+router.get("/", async (req, res) => {
+  let posts;
 
-    try {
-      post = await generatePost(req.user.name, req.body.content, req.body.imageURL);
-    } catch (error) {
-      res.status(500).json(error.message);
-      return;
-    }
-
-    try {
-      const writeOp = await createPost(post);
-      if (writeOp.insertedCount > 0) {
-        res.json(`Post created successfully`);
-      } else {
-        res.status(500).json("Unable to create post, please try again later");
-      }
-    } catch (error) {
-      res.status(500).json("Unable to create post, please try again later");
-    }
-  } else {
-    res.status(401).json("User has not been logged in.");
+  try {
+    posts = await getPosts();
+  } catch (error) {
+    res.status(500).json("Unable to get posts.");
+    return;
   }
+
+  res.json(posts);
 });
 
 export { router as postsRouter };
