@@ -1,4 +1,5 @@
 import bodyParser from "body-parser";
+import cors from "cors";
 import express from "express";
 import jwt from "express-jwt";
 import { createServer } from "http";
@@ -18,6 +19,9 @@ export const SECRET = "Not quite a secret, oops.";
 ws.on("connection", (connection) => {
   // Do websocket stuff
 });
+
+// Allow cross-origin requests
+app.use(cors());
 
 // Identify users when they connect
 app.use(jwt({ secret: SECRET, credentialsRequired: false }));

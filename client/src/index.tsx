@@ -1,4 +1,5 @@
 import { ErrorBoundary } from "components/ErrorBoundary";
+import { AuthProvider } from "contexts/auth";
 import { GlobalStyles } from "GlobalStyles";
 import React from "react";
 import { render } from "react-dom";
@@ -21,7 +22,9 @@ const renderRoot = (Component: React.ComponentType<{}>) => {
         />
         <ErrorBoundary>
           <BrowserRouter>
-            <Component />
+            <AuthProvider>
+              <Component />
+            </AuthProvider>
           </BrowserRouter>
         </ErrorBoundary>
       </>

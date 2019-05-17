@@ -1,9 +1,11 @@
-import React from "react";
+import { AuthContext } from "contexts/auth";
+import React, { useContext } from "react";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import styled, { themeColor } from "styling";
 
 const splitToastIcon = require("assets/splitToast.svg");
+const faceIcon = require("assets/face.svg");
 
 const Wrapper = styled.div`
   display: flex;
@@ -46,7 +48,20 @@ const Login = styled(Link)`
   }
 `;
 
+const User = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 900;
+
+  > img {
+    margin-right: 10px;
+  }
+`;
+
 export const Header = withRouter((props: RouteComponentProps) => {
+  const { name } = useContext(AuthContext);
+
   return (
     <Wrapper>
       <Column>
@@ -54,7 +69,14 @@ export const Header = withRouter((props: RouteComponentProps) => {
         <Heading>Toasty</Heading>
       </Column>
       <Column>
-        {props.location.pathname !== "/login" && <Login to="/login">Login</Login>}
+        {props.location.pathname !== "/login" && !name && (
+          <Login to="/login">Login</Login>
+        )}
+        {name && (
+          <User>
+            <img src={faceIcon} /> {name}
+          </User>
+        )}
       </Column>
     </Wrapper>
   );
