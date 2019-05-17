@@ -21,12 +21,12 @@ export const SECRET = "Not quite a secret, oops.";
 ws.on("connection", (connection) => {
   // Do websocket stuff
   connection.on("post", async (data) => {
-
-  })
+    // TODO
+  });
 
   connection.on("comment", async (data) => {
-
-  })
+    // TODO
+  });
 });
 
 // Allow cross-origin requests

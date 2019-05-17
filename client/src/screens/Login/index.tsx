@@ -80,10 +80,10 @@ export const Logout = (props: RouteComponentProps) => {
 };
 
 export const Register = (props: RouteComponentProps) => {
-  const [userNameInput, setUserName] = useInput("");
-  const [passwordInput, setPassword] = useInput("");
+  const [name, setName] = useInput("");
+  const [password, setPassword] = useInput("");
 
-  const register = (name: string, password: string) => async () => {
+  const register = async () => {
     try {
       await axios.post("http://localhost:5000/api/v1/auth/register", {
         name,
@@ -99,13 +99,10 @@ export const Register = (props: RouteComponentProps) => {
   return (
     <Wrapper>
       <Header>Register</Header>
-      <Input placeholder="Username" value={userNameInput} onChange={setUserName} />
-      <Input placeholder="Password" value={passwordInput} onChange={setPassword} />
+      <Input placeholder="Username" value={name} onChange={setName} />
+      <Input placeholder="Password" value={password} onChange={setPassword} />
       <ButtonWrapper>
-        <Button
-          disabled={!userNameInput || !passwordInput}
-          onClick={register(userNameInput, passwordInput)}
-        >
+        <Button disabled={!name || !password} onClick={register}>
           Create Account
         </Button>
       </ButtonWrapper>
