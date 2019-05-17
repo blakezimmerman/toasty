@@ -9,6 +9,9 @@ import { registerRoutes } from "./routes";
 
 import { pubSub, sendMessage } from "./redis";
 
+import { IPost } from "./posts/models";
+import { IComment } from "./comments/models";
+
 const app = express();
 const server = createServer(app);
 const ws = socketIO.listen(server);
@@ -17,15 +20,44 @@ export const PORT = 5000;
 export const PUBLIC_PATH = path.resolve(__dirname, "../../", "client", "dist");
 export const SECRET = "Not quite a secret, oops.";
 
+var postSockets: any[] = []
+var commentSockets: any[] = []
+
 // Set up websocket server
-ws.on("connection", (connection) => {
+ws.on("connection", (connection: any) => {
   // Do websocket stuff
-  connection.on("post", async (data) => {
-    // TODO
+  connection.on("post", async (data: IPost) => {
+    if(!(connection in postSockets)) {
+      postSockets.push(connection);
+    }
+
+    for(let i = 0; i < postSockets.length; i++) {
+      postSockets[i].emit("post", {
+        _id: data._id,
+        user: data.user,
+        content: data.content,
+        imageUrl: data.imageUrl,
+        toastConfidence: data.toastConfidence,
+        comments: data.comments,
+        timestamp: data.timestamp,
+      })
+    }
   });
 
-  connection.on("comment", async (data) => {
-    // TODO
+  connection.on("comment", async (data: IComment) => {
+    if(!(connection in commentSockets)) {
+      commentSockets.push(connection);
+    }
+
+    for(let i = 0; i < commentSockets.length; i++) {
+      commentSockets[i].emit("comment", {
+        _id: data._id,
+        user: data.user,
+        post: data.post,
+        content: data.content,
+        timestamp: data.timestamp,
+      })
+    }
   });
 });
 

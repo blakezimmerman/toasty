@@ -66,6 +66,7 @@ router.post("/", async (req: IUserRequest, res: Response) => {
     try {
       const writeOp = await createPost(post);
       if (writeOp.insertedCount > 0) {
+        
         pubSub.emit(`post:success:${post._id}`, {
           requestId: post._id,
           data: {
