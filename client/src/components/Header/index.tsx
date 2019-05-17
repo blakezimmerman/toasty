@@ -21,6 +21,8 @@ const Wrapper = styled.div`
 const Column = styled.div`
   display: flex;
   align-items: center;
+
+  ${(props) => "onClick" in props && "cursor: pointer;"}
 `;
 
 const Heading = styled.h1`
@@ -62,9 +64,11 @@ const User = styled.div`
 export const Header = withRouter((props: RouteComponentProps) => {
   const { name } = useContext(AuthContext);
 
+  const toFeed = () => props.history.push("/");
+
   return (
     <Wrapper>
-      <Column>
+      <Column onClick={toFeed}>
         <img src={splitToastIcon} />
         <Heading>Toasty</Heading>
       </Column>
