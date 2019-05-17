@@ -18,6 +18,13 @@ export const SECRET = "Not quite a secret, oops.";
 // Set up websocket server
 ws.on("connection", (connection) => {
   // Do websocket stuff
+  connection.on("post", async (data) => {
+
+  })
+
+  connection.on("comment", async (data) => {
+
+  })
 });
 
 // Allow cross-origin requests
