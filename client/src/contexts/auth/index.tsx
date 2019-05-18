@@ -38,7 +38,7 @@ export const AuthProvider = (props: IProps) => {
 
   const login = async (name: string, password: string) => {
     try {
-      const { data } = await axios.post("http://localhost:5000/api/v1/auth/login", {
+      const { data } = await axios.post(`${process.env.API}/api/v1/auth/login`, {
         name,
         password,
       });

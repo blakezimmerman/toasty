@@ -30,7 +30,7 @@ export const CommentInput = (props: IProps) => {
   const createComment = async () => {
     try {
       await axios.post(
-        `http://localhost:5000/api/v1/comments/post/${props.postId}`,
+        `${process.env.API}/api/v1/comments/post/${props.postId}`,
         { content: comment },
         { headers: { Authorization: `Bearer ${props.token}` } },
       );

@@ -29,7 +29,7 @@ export const CommentProvider = (props: IProps) => {
     setLoading(true);
     try {
       const { data } = await axios.get(
-        `http://localhost:5000/api/v1/comments/post/${postId}`,
+        `${process.env.API}/api/v1/comments/post/${postId}`,
       );
       setComments((prevComments) => ({
         ...prevComments,

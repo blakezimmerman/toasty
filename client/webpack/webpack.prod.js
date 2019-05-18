@@ -11,20 +11,20 @@ module.exports = webpackMerge(commonConfig, {
   output: {
     path: BUILD_DIR,
     filename: "[name].[chunkhash].js",
-    publicPath: "/"
+    publicPath: "/",
   },
 
   optimization: {
     splitChunks: {
-      chunks: "all"
+      chunks: "all",
     },
-    runtimeChunk: true
+    runtimeChunk: true,
   },
 
   plugins: [
     new CompressionPlugin({
       minRatio: 0.6,
-      threshold: 5000
-    })
-  ]
+      threshold: 5000,
+    }),
+  ],
 });

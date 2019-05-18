@@ -1,23 +1,23 @@
 version: "3"
 services:
   toasty:
-    container_name: toasty-server
+    container_name: toasty-all-server
     restart: always
     build: .
     ports:
-      - "5000:3000"
+      - "5000:5000"
     links:
       - mongo
       - redis
   mongo:
-    container_name: toasty-mongo
+    container_name: toasty-all-mongo
     image: mongo:4.0.6-xenial
     volumes:
       - ./data:/data/db
     ports:
       - "27017:27017"
   redis:
-    container_name: toasty-redis
+    container_name: toasty-all-redis
     image: redis:5.0.4-alpine
     ports:
       - "6379:6379"

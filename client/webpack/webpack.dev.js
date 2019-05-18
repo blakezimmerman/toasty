@@ -10,7 +10,7 @@ module.exports = webpackMerge(commonConfig, {
 
   output: {
     filename: "[name].js",
-    publicPath: "/"
+    publicPath: "/",
   },
 
   devServer: {
@@ -19,13 +19,10 @@ module.exports = webpackMerge(commonConfig, {
     historyApiFallback: true,
     overlay: {
       warnings: true,
-      errors: true
+      errors: true,
     },
-    progress: true
+    progress: true,
   },
 
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
-  ]
+  plugins: [new webpack.HotModuleReplacementPlugin(), new webpack.NoEmitOnErrorsPlugin()],
 });

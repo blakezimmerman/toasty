@@ -1,8 +1,8 @@
 # Get the Node.js image from Docker Hub
 FROM node:11.13.0-alpine
 
-# Expose port 3000 to run the server on
-EXPOSE 3000
+# Expose port 5000 to run the server on
+EXPOSE 5000
 
 # Create a working directory and cd to it
 RUN mkdir /client

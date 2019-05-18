@@ -85,7 +85,7 @@ export const Register = (props: RouteComponentProps) => {
 
   const register = async () => {
     try {
-      await axios.post("http://localhost:5000/api/v1/auth/register", {
+      await axios.post(`${process.env.API}/api/v1/auth/register`, {
         name,
         password,
       });

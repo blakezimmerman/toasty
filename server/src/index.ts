@@ -34,6 +34,7 @@ const expressStaticGzip = require("express-static-gzip");
 app.use(expressStaticGzip(PUBLIC_PATH));
 
 app.get("/*", (req, res) => {
+  console.log(path.resolve(PUBLIC_PATH, "index.html"));
   res.sendFile(path.resolve(PUBLIC_PATH, "index.html"));
 });
 

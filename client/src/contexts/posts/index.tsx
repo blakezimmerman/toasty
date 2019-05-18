@@ -30,7 +30,7 @@ export const PostProvider = (props: IProps) => {
   const getPosts = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get("http://localhost:5000/api/v1/posts");
+      const { data } = await axios.get(`${process.env.API}/api/v1/posts`);
       const newPosts = data.reduce((acc: Record<string, IPost>, post: IPost) => {
         acc[post._id] = post;
         return acc;
@@ -50,7 +50,7 @@ export const PostProvider = (props: IProps) => {
     }
 
     try {
-      const { data } = await axios.get(`http://localhost:5000/api/v1/posts/${id}`);
+      const { data } = await axios.get(`${process.env.API}/api/v1/posts/${id}`);
       setLoading(false);
       return data as IPost;
     } catch (error) {

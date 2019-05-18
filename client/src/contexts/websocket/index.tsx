@@ -8,7 +8,7 @@ import openSocket from "socket.io-client";
 export const WebsocketListener = () => {
   const { appendPost } = useContext(PostContext);
   const { appendComment } = useContext(CommentContext);
-  const [socket] = useState(openSocket("http://localhost:5000"));
+  const [socket] = useState(openSocket(`${process.env.API}`));
 
   useEffect(() => {
     // Set up callbacks to handle new messages
