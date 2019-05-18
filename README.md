@@ -2,7 +2,7 @@
 
 Description
 
-[![Not a Hotdog](https://giphy.com/embed/l0Iy9iqThC2ueLTkA)](https://www.youtube.com/watch?v=ACmydtFDTGs)
+[![Not a Hotdog](https://i.imgur.com/MpEY9bi.gif)](https://www.youtube.com/watch?v=ACmydtFDTGs)
 
 Toasty is a social media platform for sharing and discussing all toast related images, where users are encouraged to submit various images of toast.
 
