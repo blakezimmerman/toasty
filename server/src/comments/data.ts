@@ -10,11 +10,11 @@ export const createComment = async (comment: IComment) => {
     };
 
     const pCollection = await postCollection();
-    var post = await getPost(newComment.post)
+    const post = await getPost(newComment.post);
 
     if (post) {
       post.comments.push(newComment._id);
-      pCollection.save(post)
+      pCollection.save(post);
     }
 
     return collection.insertOne(newComment);
@@ -23,10 +23,10 @@ export const createComment = async (comment: IComment) => {
   }
 };
 
-export const getComment = async (_id: string): Promise<IComment | null> => {
+export const getComment = async (id: string): Promise<IComment | null> => {
   try {
     const collection = await commentCollection();
-    const comment = await collection.findOne<IComment>({ _id });
+    const comment = await collection.findOne<IComment>({ _id: id });
     return comment
       ? {
           _id: comment._id,
@@ -44,17 +44,7 @@ export const getComment = async (_id: string): Promise<IComment | null> => {
 export const getComments = async (post: string): Promise<any> => {
   try {
     const collection = await commentCollection();
-    const commentsData = await collection.find({ post }).toArray();
-    let comments = [];
-    for(let i = 0; i < commentsData.length; i++) {
-      comments.push({
-                  _id: commentsData[i]._id,
-                  user: commentsData[i].user,
-                  post: commentsData[i].post,
-                  content: commentsData[i].content,
-                  timestamp: commentsData[i].timestamp,
-                })
-    }
+    const comments = await collection.find({ post }).toArray();
     return comments;
   } catch (error) {
     throw new Error(error);

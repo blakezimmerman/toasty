@@ -1,4 +1,4 @@
-import { Request } from "express"
+import { Request } from "express";
 
 export interface IUser {
   _id: string;
@@ -8,5 +8,5 @@ export interface IUser {
 }
 
 export interface IUserRequest extends Request {
-  user: IUser
+  user: string;
 }

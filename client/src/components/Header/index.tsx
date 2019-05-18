@@ -8,6 +8,8 @@ const splitToastIcon = require("assets/splitToast.svg");
 const faceIcon = require("assets/face.svg");
 
 const Wrapper = styled.div`
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;

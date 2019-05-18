@@ -1,5 +1,7 @@
 import { ErrorBoundary } from "components/ErrorBoundary";
 import { AuthProvider } from "contexts/auth";
+import { PostProvider } from "contexts/posts";
+import { WebsocketListener } from "contexts/websocket";
 import { GlobalStyles } from "GlobalStyles";
 import React from "react";
 import { render } from "react-dom";
@@ -23,7 +25,10 @@ const renderRoot = (Component: React.ComponentType<{}>) => {
         <ErrorBoundary>
           <BrowserRouter>
             <AuthProvider>
-              <Component />
+              <PostProvider>
+                <WebsocketListener />
+                <Component />
+              </PostProvider>
             </AuthProvider>
           </BrowserRouter>
         </ErrorBoundary>

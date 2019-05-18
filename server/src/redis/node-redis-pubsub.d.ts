@@ -5,12 +5,12 @@ declare module "node-redis-pubsub" {
     on<T = any>(
       channel: string,
       handler: (data: T, channel: string) => void,
-      callback?: () => void
+      callback?: () => void,
     ): () => void;
     subscribe<T = any>(
       channel: string,
       handler: (data: T, channel: string) => void,
-      callback?: () => void
+      callback?: () => void,
     ): () => void;
     emit<T = any>(channel: string, message: T): void;
     publish<T = any>(channel: string, message: T): void;

@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "npm run prettier && tslint --config tslint.json --project tsconfig.json 'src/**/*.{ts,tsx}'",
     "prettier": "prettier --write \"src/**/**/*.{ts,tsx}\"",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node --files src/index.ts"
   },
   "license": "ISC",
   "devDependencies": {

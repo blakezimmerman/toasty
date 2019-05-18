@@ -1,4 +1,4 @@
-const NodeRedisPubSub = require("node-redis-pubsub");
+import NodeRedisPubSub from "node-redis-pubsub";
 
 const config = {
   port: 6379,
@@ -23,12 +23,12 @@ const sendMessage = <T, U>(eventName: string, data: T, options = defaultOptions)
       const successEventName = `${eventName}:success`;
       const failedEventName = `${eventName}:failed`;
 
-      const success = options.pubSub.on(successEventName, (response: any) => {
+      const success = options.pubSub.on(successEventName, (response) => {
         fulfill(response);
         endMessageLifeCycle();
       });
 
-      const error = options.pubSub.on(failedEventName, (response: any) => {
+      const error = options.pubSub.on(failedEventName, (response) => {
         reject(response);
         endMessageLifeCycle();
       });

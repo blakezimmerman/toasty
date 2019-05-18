@@ -1,11 +1,9 @@
-import config from "config";
-import express from "express";
+import express, { Response } from "express";
 import { ObjectId } from "mongodb";
+import { sendMessage } from "../redis";
+import { IUserRequest } from "../users/models";
 import { createComment, getComment, getComments } from "./data";
 import { IComment } from "./models";
-import { Response } from "express";
-import { IUserRequest } from "../users/models";
-import { pubSub } from "../redis";
 
 const router = express.Router();
 
@@ -16,9 +14,9 @@ const generateComment = async (
 ): Promise<IComment> => {
   return {
     _id: new ObjectId().toHexString(),
-    user: user,
-    post: post,
-    content: content,
+    user,
+    post,
+    content,
     timestamp: new Date().toISOString(),
   };
 };
@@ -28,7 +26,7 @@ router.post("/post/:id", async (req: IUserRequest, res: Response) => {
     let comment;
 
     try {
-      comment = await generateComment(req.user.name, req.params.id, req.body.content);
+      comment = await generateComment(req.user, req.params.id, req.body.content);
     } catch (error) {
       res.status(500).json(error.message);
       return;
@@ -37,19 +35,7 @@ router.post("/post/:id", async (req: IUserRequest, res: Response) => {
     try {
       const writeOp = await createComment(comment);
       if (writeOp.insertedCount > 0) {
-
-        pubSub.emit(`comment:success:${comment._id}`, {
-          requestId: comment._id,
-          data: {
-                  _id: comment._id,
-                  user: comment.user,
-                  post: comment.post,
-                  content: comment.content,
-                  timestamp: comment.timestamp,
-                },
-          eventName: "comment"
-        });
-
+        sendMessage("newComment", comment);
         res.json(comment);
       } else {
         res.status(500).json("Unable to create comment on post, please try again later");
@@ -68,7 +54,7 @@ router.get("/:id", async (req, res) => {
   try {
     comment = await getComment(req.params.id);
   } catch (error) {
-    res.status(500).json(`Unable to to get comment with _id of '${ req.params.id }'`);
+    res.status(500).json(`Unable to to get comment with _id of '${req.params.id}'`);
     return;
   }
 
@@ -81,7 +67,9 @@ router.get("/post/:id", async (req, res) => {
   try {
     comments = await getComments(req.params.id);
   } catch (error) {
-    res.status(500).json(`Unable to to get post's comments with _id of '${ req.params.id }'`);
+    res
+      .status(500)
+      .json(`Unable to to get post's comments with _id of '${req.params.id}'`);
     return;
   }
 

@@ -1,7 +1,7 @@
 import config from "config";
 import express, { Response } from "express";
 import { ObjectId } from "mongodb";
-import { pubSub } from "../redis";
+import { sendMessage } from "../redis";
 import { IUserRequest } from "../users/models";
 import { createPost, getPost, getPosts } from "./data";
 import { IPost } from "./models";
@@ -57,7 +57,7 @@ router.post("/", async (req: IUserRequest, res: Response) => {
     let post;
 
     try {
-      post = await generatePost(req.user.name, req.body.content, req.body.imageUrl);
+      post = await generatePost(req.user, req.body.content, req.body.imageUrl);
     } catch (error) {
       res.status(500).json(error.message);
       return;
@@ -66,21 +66,7 @@ router.post("/", async (req: IUserRequest, res: Response) => {
     try {
       const writeOp = await createPost(post);
       if (writeOp.insertedCount > 0) {
-        
-        pubSub.emit(`post:success:${post._id}`, {
-          requestId: post._id,
-          data: {
-            _id: post._id,
-            user: post.user,
-            content: post.content,
-            imageUrl: post.imageUrl,
-            toastConfidence: post.toastConfidence,
-            comments: post.comments,
-            timestamp: post.timestamp,
-          },
-          eventName: "post",
-        });
-
+        await sendMessage("newPost", post);
         res.json(post);
       } else {
         res.status(500).json("Unable to create post, please try again later");

@@ -19,6 +19,7 @@
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-toastify": "^5.1.0",
+    "socket.io-client": "^2.2.0",
     "styled-components": "^4.2.0"
   },
   "devDependencies": {
@@ -28,6 +29,7 @@
     "@types/react-dom": "^16.8.4",
     "@types/react-router": "^5.0.0",
     "@types/react-router-dom": "^4.3.3",
+    "@types/socket.io-client": "^1.4.32",
     "@types/styled-components": "^4.1.14",
     "@types/webpack": "^4.4.31",
     "@types/webpack-env": "^1.13.9",

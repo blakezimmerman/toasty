@@ -13,10 +13,10 @@ export const createPost = async (post: IPost) => {
   }
 };
 
-export const getPost = async (_id: string): Promise<IPost | null> => {
+export const getPost = async (id: string): Promise<IPost | null> => {
   try {
     const collection = await postCollection();
-    const post = await collection.findOne<IPost>({ _id });
+    const post = await collection.findOne<IPost>({ _id: id });
     return post
       ? {
           _id: post._id,
@@ -36,19 +36,7 @@ export const getPost = async (_id: string): Promise<IPost | null> => {
 export const getPosts = async () => {
   try {
     const collection = await postCollection();
-    const postsData = await collection.find().toArray();
-    let posts = [];
-    for(let i = 0; i < postsData.length; i++) {
-      posts.push({
-                  _id: postsData[i]._id,
-                  user: postsData[i].user,
-                  content: postsData[i].content,
-                  imageUrl: postsData[i].imageUrl,
-                  toastConfidence: postsData[i].toastConfidence,
-                  comments: postsData[i].comments,
-                  timestamp: postsData[i].timestamp,
-                })
-    }
+    const posts = await collection.find().toArray();
     return posts;
   } catch (error) {
     throw new Error(error);

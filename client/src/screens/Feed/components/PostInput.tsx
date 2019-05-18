@@ -44,6 +44,8 @@ export const PostInput = (props: IProps) => {
         { headers: { Authorization: `Bearer ${props.token}` } },
       );
       toast.success("Post created successfully");
+      setImageUrl("");
+      setContent("");
     } catch (error) {
       toast.error(error.response.data);
     }
