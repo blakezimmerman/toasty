@@ -1,5 +1,6 @@
 import { ErrorBoundary } from "components/ErrorBoundary";
 import { AuthProvider } from "contexts/auth";
+import { CommentProvider } from "contexts/comments";
 import { PostProvider } from "contexts/posts";
 import { WebsocketListener } from "contexts/websocket";
 import { GlobalStyles } from "GlobalStyles";
@@ -26,8 +27,10 @@ const renderRoot = (Component: React.ComponentType<{}>) => {
           <BrowserRouter>
             <AuthProvider>
               <PostProvider>
-                <WebsocketListener />
-                <Component />
+                <CommentProvider>
+                  <WebsocketListener />
+                  <Component />
+                </CommentProvider>
               </PostProvider>
             </AuthProvider>
           </BrowserRouter>

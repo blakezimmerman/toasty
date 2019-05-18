@@ -2,6 +2,7 @@ import { Post } from "components/Post";
 import { AuthContext } from "contexts/auth";
 import { PostContext } from "contexts/posts";
 import React, { useContext, useEffect } from "react";
+import { RouteComponentProps } from "react-router-dom";
 import styled from "styling";
 import { PostInput } from "./components/PostInput";
 
@@ -28,7 +29,7 @@ const Message = styled.div`
   padding-top: 1rem;
 `;
 
-export const Feed = () => {
+export const Feed = (props: RouteComponentProps) => {
   const { name, token } = useContext(AuthContext);
   const { posts, getPosts, loading } = useContext(PostContext);
 
@@ -38,13 +39,17 @@ export const Feed = () => {
     }
   }, [!!getPosts]);
 
+  const toComments = (id: string) => () => {
+    props.history.push(`/${id}`);
+  };
+
   return (
     <Wrapper>
       <PostInput loggedIn={!!name} token={token} />
       {loading && <Message>Loading...</Message>}
       {!loading && !posts.length && <Message>No posts yet</Message>}
       {posts.map((post) => (
-        <Post key={post._id} post={post} />
+        <Post key={post._id} post={post} onClick={toComments(post._id)} />
       ))}
     </Wrapper>
   );

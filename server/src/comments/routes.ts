@@ -35,7 +35,7 @@ router.post("/post/:id", async (req: IUserRequest, res: Response) => {
     try {
       const writeOp = await createComment(comment);
       if (writeOp.insertedCount > 0) {
-        sendMessage("newComment", comment);
+        sendMessage("newComment", { postId: req.params.id, newComment: comment });
         res.json(comment);
       } else {
         res.status(500).json("Unable to create comment on post, please try again later");

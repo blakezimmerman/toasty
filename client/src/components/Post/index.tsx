@@ -11,6 +11,7 @@ const Wrapper = styled.div`
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  ${(props) => "onClick" in props && "cursor: pointer;"}
 `;
 
 const RatingRow = styled.div`
@@ -55,15 +56,20 @@ const Accent = styled.span`
   color: ${themeColor("primary")};
 `;
 
-const Comments = styled.div``;
+const Comments = styled.div`
+  font-weight: bold;
+`;
 
 interface IProps {
   post: IPost;
+  onClick?: () => void;
+  commentCount?: number;
 }
 
-export const Post = ({ post }: IProps) => {
+export const Post = ({ post, onClick, commentCount }: IProps) => {
+  const numComments = commentCount || post.comments.length;
   return (
-    <Wrapper>
+    <Wrapper onClick={onClick}>
       <RatingRow>
         <img
           src={post.toastConfidence > 0.7 ? toastIcon : notToastIcon}
@@ -78,8 +84,8 @@ export const Post = ({ post }: IProps) => {
           Submitted by <Accent>{post.user}</Accent>
         </Submission>
         <Comments>
-          {post.comments.length}
-          {post.comments.length === 1 ? " comment" : " comments"}
+          {numComments}
+          {numComments === 1 ? " comment" : " comments"}
         </Comments>
       </DetailRow>
     </Wrapper>
